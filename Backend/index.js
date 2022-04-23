@@ -4,20 +4,6 @@ var bodyParser = require("body-parser");
 var session = require("express-session");
 const { mongoDB, frontendURL } = require("./Utils/config");
 var cors = require("cors");
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./");
-  },
-  filename: function (req, file, cb) {
-    const ext = file.mimetype.split("/")[1];
-    cb(null, "uploads/" + file.originalname);
-  },
-});
-const upload = multer({
-  storage: storage,
-});
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: frontendURL, credentials: true }));
@@ -72,11 +58,11 @@ mongoose.connect(mongoDB, options, (err, res) => {
 const Login = require("./routes/Login");
 const Register = require("./routes/Register");
 const Book = require("./routes/Book");
-//const Register = require("./routes/Register");
+const User = require("./routes/User");
 
-app.use("/user", Login);
-app.use("/user", Register);
+app.use("/auth", Login);
+app.use("/auth", Register);
 app.use("/book", Book);
-//app.use("/register", Register);
+app.use("/user", User);
 //start your server on port 3001
 app.listen(3001, () => console.log("Server Listening on port 3001"));

@@ -17,11 +17,43 @@ class Navbar extends Component {
     let navLogin = null;
     if (localStorage.getItem("token")) {
       navLogin = (
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <Link to="/" onClick={this.handleLogout}>
-              <span class="glyphicon glyphicon-user"></span>Logout
-            </Link>
+        <ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/favorites">Favorites</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/profile">Profile</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/cart">My Cart</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/registerShop">Register My Shop</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/shop">My Shop</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/purchases">Past Orders</Link>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/" onClick={this.handleLogout}>
+                <span class="glyphicon glyphicon-user"></span>Logout
+              </Link>
+            </a>
           </li>
         </ul>
       );
@@ -29,16 +61,20 @@ class Navbar extends Component {
       //Else display login button
       console.log("Not Able to read cookie");
       navLogin = (
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <Link to="/login">
-              <span class="glyphicon glyphicon-log-in"></span> Login
-            </Link>
+        <ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/login">
+                <span class="glyphicon glyphicon-log-in"></span> Login
+              </Link>
+            </a>
           </li>
-          <li>
-            <Link to="/register">
-              <span class="glyphicon glyphicon-log-in"></span> Register
-            </Link>
+          <li class="nav-item">
+            <a class="nav-link">
+              <Link to="/register">
+                <span class="glyphicon glyphicon-log-in"></span> Register
+              </Link>
+            </a>
           </li>
         </ul>
       );
@@ -50,22 +86,13 @@ class Navbar extends Component {
     return (
       <div>
         {redirectVar}
-        <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand">Book Store App</a>
-            </div>
-            <ul class="nav navbar-nav">
-              <li>
-                <Link to="/home">Home</Link>
-              </li>
-              <li>
-                <Link to="/create">Add a Book</Link>
-              </li>
-              <li>
-                <Link to="/delete">Delete a Book</Link>
-              </li>
-            </ul>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <a className="navbar-brand">
+              <Link to="/home">
+                <span class="glyphicon glyphicon-log-in"></span> Etsy
+              </Link>
+            </a>
             {navLogin}
           </div>
         </nav>

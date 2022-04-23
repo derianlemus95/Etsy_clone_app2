@@ -52,7 +52,7 @@ class Login extends Component {
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
-    axios.post("http://localhost:3001/user/login", data).then((response) => {
+    axios.post("http://localhost:3001/auth/login", data).then((response) => {
       if (response.status === 200) {
         this.setState({
           token: response.data,

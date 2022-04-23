@@ -57,7 +57,7 @@ class Register extends Component {
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
-    axios.post("http://localhost:3001/user/register", data).then((response) => {
+    axios.post("http://localhost:3001/auth/register", data).then((response) => {
       if (response.status === 200) {
         this.setState({
           authFlag: false,
