@@ -4,9 +4,11 @@ var bodyParser = require("body-parser");
 var session = require("express-session");
 const { mongoDB, frontendURL } = require("./Utils/config");
 var cors = require("cors");
-
+const path = require("path");
 //use cors to allow cross origin resource sharing
-app.use(cors({ origin: frontendURL, credentials: true }));
+app.use(
+  cors({ origin: frontendURL, methods: ["GET", "POST"], credentials: true })
+);
 
 //use express session to maintain session data
 app.use(
@@ -59,10 +61,11 @@ const Login = require("./routes/Login");
 const Register = require("./routes/Register");
 const Book = require("./routes/Book");
 const User = require("./routes/User");
-
+const Item = require("./routes/Item");
 app.use("/auth", Login);
 app.use("/auth", Register);
 app.use("/book", Book);
 app.use("/user", User);
+app.use("/shop", Item);
 //start your server on port 3001
 app.listen(3001, () => console.log("Server Listening on port 3001"));
