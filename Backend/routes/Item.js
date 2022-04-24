@@ -138,20 +138,17 @@ router.post("/getproducts", (req, res) => {
   //oerder by default is ascending order
   if (minPrice >= 0 && maxPrice > 0) {
     myquery =
-      "SELECT * FROM products WHERE (name LIKE N?) AND (price BETWEEN ? AND ?) ORDER BY ??";
+      "SELECT * FROM products WHERE (name LIKE %term%) AND (price BETWEEN 4 AND 50) ORDER BY price";
     values = [term, minPrice, maxPrice, sortBy];
   } else {
-    //return regular query
-    myquery = "SELECT * FROM products WHERE name LIKE N? ORDER BY ??";
-    values = [term, sortBy];
+    Items.find({ name: new RegExp(req.body.term, "i") }, (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        //console.log("Products : ",JSON.stringify(result));
+        res.send(JSON.stringify(result));
+      }
+    }).sort({ sortBy: 1 });
   }
-  db.query(myquery, values, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    } else {
-      //console.log("Products : ",JSON.stringify(result));
-      res.send(JSON.stringify(result));
-    }
-  });
 });
 module.exports = router;

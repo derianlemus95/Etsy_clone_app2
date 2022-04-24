@@ -100,7 +100,7 @@ class Home extends Component {
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
-    axios.post("http://localhost:3001/getproducts", data).then((res) => {
+    axios.post("http://localhost:3001/shop/getproducts", data).then((res) => {
       if (res) {
         this.setState({
           authFlag: false,
