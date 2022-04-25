@@ -29,6 +29,7 @@ class Cart extends Component {
     };
     axios.post("http://localhost:3001/shop/getCart", data).then((response) => {
       if (response) {
+        console.log(response);
         this.setState({
           items: this.state.items.concat(response.data[0]),
           total: this.state.total.concat(response.data[1]),

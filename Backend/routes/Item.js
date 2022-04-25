@@ -204,6 +204,7 @@ router.post("/addToCart", (req, res) => {
 });
 
 router.post("/getCart", (req, res) => {
+  var myanswer = [];
   Carts.find(
     {
       user: req.body.username,
@@ -218,55 +219,55 @@ router.post("/getCart", (req, res) => {
       } else {
         let items = [];
         let quantity = [];
-        console.log(result);
         result.map((re) => items.push(re.itemId));
         result.map((re) => quantity.push(re.quantity));
-        console.log(items);
-        console.log(quantity);
-
-        //console.log("Cart Items : ",JSON.stringify(result));
-        //res.send(JSON.stringify(result));
         if (items) {
-          // const query =
-          // "SELECT * FROM products WHERE id in (?" +
-          //",?".repeat(items.length - 1) +
-          // ")";
-          // Items.find({});
+          //var myanswer = [];
           var quantityPrice = 0;
+          var total = 0;
           var mycombinedresult = [];
-          var myanswer;
-          const myFunction = () => {
-            for (let i = 0; i < items.length; i++) {
-              Items.find(
-                {
-                  name: { $in: [items[i]] },
-                },
-                function (err, result) {
-                  if (err) {
-                    throw err;
-                  } else {
-                    result.map((re, index) => (re.quantity = quantity[index]));
-                    result.map(
-                      (re, index) =>
-                        (quantityPrice =
-                          re.price * quantity[index] + quantityPrice)
-                    );
-                    //console.log(quantityPrice);
-                    //let mycombinedresult = [];
-                    mycombinedresult.push(result);
-                    mycombinedresult.push(quantityPrice.toString());
-                    //console.log(mycombinedresult);
-                    myanswer = mycombinedresult;
-                    //response.json(quantityPrice);
-                  }
+          var myitems = [];
+          for (let i = 0; i < items.length; i++) {
+            Items.find(
+              {
+                name: { $in: [items[i]] },
+              },
+              (err, result) => {
+                if (err) {
+                  throw err;
+                } else {
+                  result.map((re, index) => (re.quantity = quantity[index]));
+                  result.map(
+                    (re, index) =>
+                      (quantityPrice =
+                        re.price * quantity[index] + quantityPrice)
+                  );
+                  //console.log(quantityPrice);
+                  // mycombinedresult = [];
+                  //mycombinedresult.push(result);
+                  console.log("this result" + result);
+                  myitems.push(...result);
+                  mycombinedresult = [...myitems];
+                  //mycombinedresult.push(quantityPrice.toString());
+                  total = quantityPrice.toString();
+                  //myanswer.push(result);
+                  //myanswer.push(quantityPrice.toString());
+                  //console.log(mycombinedresult);
+                  // myanswer = mycombinedresult;
+                  //response.json(quantityPrice);
+                  //res.send(JSON.stringify(mycombinedresult));
                 }
-              );
-            }
-          };
-          myFunction();
-          console.log(myanswer);
-
-          res.send(JSON.stringify(mycombinedresult));
+              }
+            );
+          }
+          setTimeout(function () {
+            var allresult = [];
+            allresult.push(mycombinedresult);
+            allresult.push(total);
+            console.log("total " + total);
+            console.log("Cart Items : " + JSON.stringify(allresult));
+            return res.status(200).send(JSON.stringify(allresult));
+          }, 1000);
         } else {
           res.end("EMPTY");
         }
