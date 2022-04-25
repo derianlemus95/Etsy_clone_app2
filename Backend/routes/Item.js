@@ -6,6 +6,7 @@ const multer = require("multer");
 const Items = require("../Models/ItemModel");
 const Users = require("../Models/UserModel");
 const Carts = require("../Models/CartModel");
+const Purchases = require("../Models/PurchaseModel");
 const path = require("path");
 
 //handle item pic directory
@@ -181,11 +182,13 @@ router.post("/getitem", function (req, res) {
 //insert cart
 router.post("/addToCart", (req, res) => {
   console.log("Adding to Cart");
+  console.log(req.body.id.name);
   var newCart1 = [
     {
       user: req.body.username,
       quantity: req.body.quantity,
       itemId: req.body.id,
+      //item: req.body.id,
     },
   ];
   Carts.insertMany(newCart1, (err, result) => {
@@ -276,4 +279,39 @@ router.post("/getCart", (req, res) => {
   );
 });
 
+//api to handle confim purchase by user
+router.post("/purchase", function (req, res) {
+  const items = req.body.items;
+  console.log(req.body);
+  items.map((item) => {
+    Purchases.insertMany(
+      {
+        user: req.body.username,
+        quantity: item.quantity,
+        itemId: item.name,
+        total: req.body.total[0],
+      },
+      (error, result) => {
+        if (error) {
+          throw error;
+        }
+      }
+    );
+  });
+  items.map((item) => {
+    Carts.deleteMany(
+      {
+        user: req.body.username,
+        itemId: item.name,
+      },
+      (error, result) => {
+        if (error) {
+          throw error;
+        }
+      }
+    );
+  });
+  console.log("success");
+  res.send("SUCCESS");
+});
 module.exports = router;

@@ -12,6 +12,7 @@ class Cart extends Component {
     this.state = {
       total: [],
       items: [],
+      newquantity: 1,
       username: localStorage.getItem("email"),
       authFlag: false,
     };
@@ -47,7 +48,7 @@ class Cart extends Component {
       total: this.state.total,
     };
     //make a post request with the user data
-    axios.post("http://localhost:3001/purchase", data).then((res) => {
+    axios.post("http://localhost:3001/shop/purchase", data).then((res) => {
       if (res.data === "SUCCESS") {
         this.setState({
           authFlag: true,
@@ -70,23 +71,20 @@ class Cart extends Component {
             )}
           </td>
           <td>{item.name}</td>
-          <td>
-            <div style={{ width: "15%" }} class="form-check form-check-inline">
-              <label class="form-check-label" for="inLineText1">
-                qt:
-              </label>
-              <input
-                id="quantity"
-                onChange={this.minPriceChangeHandler}
-                type="number"
-                class="form-control"
-                name="quantity"
-                placeholder={item.quantity}
-              />
-            </div>
-            {item.quantity} X
-          </td>
+          <td>{item.quantity} X</td>
           <td>${item.price}</td>
+          <td>
+            <Button>MAKE IT A GIFT</Button>
+          </td>
+          <td>
+            <input
+              onChange={this.nameChangeHandler}
+              type="text"
+              class="form-control"
+              name="message"
+              placeholder="Write a Message Here..."
+            />
+          </td>
         </tr>
       );
     });
@@ -113,6 +111,8 @@ class Cart extends Component {
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
+                <th>Is Gift</th>
+                <th>Message</th>
               </tr>
             </thead>
             <tbody>
