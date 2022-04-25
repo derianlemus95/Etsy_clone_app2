@@ -5,12 +5,13 @@ const { checkAuth } = require("../utils/passport");
 const multer = require("multer");
 const Items = require("../Models/ItemModel");
 const Users = require("../Models/UserModel");
+const Carts = require("../Models/CartModel");
 const path = require("path");
 
 //handle item pic directory
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./");
+    cb(null, "../");
   },
   filename: function (req, file, cb) {
     const ext = file.mimetype.split("/")[1];
@@ -151,4 +152,127 @@ router.post("/getproducts", (req, res) => {
     }).sort({ sortBy: 1 });
   }
 });
+
+router.post("/getitem", function (req, res) {
+  //console.log(req.body)
+  Items.find({ name: req.body.id }, (err, result) => {
+    if (err) {
+      res.writeHead(201, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error");
+    }
+    if (result) {
+      // {user}JSON.stringify(books)
+      //return succes to front end
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(result));
+    } else {
+      res.writeHead(201, {
+        "Content-Type": "text/plain",
+      });
+      res.end("NO ITEM FOUND");
+    }
+  });
+});
+
+//insert cart
+router.post("/addToCart", (req, res) => {
+  console.log("Adding to Cart");
+  var newCart1 = [
+    {
+      user: req.body.username,
+      quantity: req.body.quantity,
+      itemId: req.body.id,
+    },
+  ];
+  Carts.insertMany(newCart1, (err, result) => {
+    if (err) {
+      res.writeHead(201, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error trying to Insert");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Successful Insert");
+    }
+  });
+});
+
+router.post("/getCart", (req, res) => {
+  Carts.find(
+    {
+      user: req.body.username,
+    },
+    {
+      itemId: 1,
+      quantity: 1,
+    },
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        let items = [];
+        let quantity = [];
+        console.log(result);
+        result.map((re) => items.push(re.itemId));
+        result.map((re) => quantity.push(re.quantity));
+        console.log(items);
+        console.log(quantity);
+
+        //console.log("Cart Items : ",JSON.stringify(result));
+        //res.send(JSON.stringify(result));
+        if (items) {
+          // const query =
+          // "SELECT * FROM products WHERE id in (?" +
+          //",?".repeat(items.length - 1) +
+          // ")";
+          // Items.find({});
+          var quantityPrice = 0;
+          var mycombinedresult = [];
+          var myanswer;
+          const myFunction = () => {
+            for (let i = 0; i < items.length; i++) {
+              Items.find(
+                {
+                  name: { $in: [items[i]] },
+                },
+                function (err, result) {
+                  if (err) {
+                    throw err;
+                  } else {
+                    result.map((re, index) => (re.quantity = quantity[index]));
+                    result.map(
+                      (re, index) =>
+                        (quantityPrice =
+                          re.price * quantity[index] + quantityPrice)
+                    );
+                    //console.log(quantityPrice);
+                    //let mycombinedresult = [];
+                    mycombinedresult.push(result);
+                    mycombinedresult.push(quantityPrice.toString());
+                    //console.log(mycombinedresult);
+                    myanswer = mycombinedresult;
+                    //response.json(quantityPrice);
+                  }
+                }
+              );
+            }
+          };
+          myFunction();
+          console.log(myanswer);
+
+          res.send(JSON.stringify(mycombinedresult));
+        } else {
+          res.end("EMPTY");
+        }
+      }
+    }
+  );
+});
+
 module.exports = router;

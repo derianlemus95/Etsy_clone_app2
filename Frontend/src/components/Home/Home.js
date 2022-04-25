@@ -32,7 +32,7 @@ class Home extends Component {
 
   handleAddToFavorites(e) {
     const data = {
-      username: cookie.load("cookie"),
+      username: localStorage.getItem("email"),
       id: e.target.value,
     };
     axios
@@ -140,7 +140,7 @@ class Home extends Component {
           <td>
             <div style={{ width: "100%" }}>
               <Button
-                value={product.id}
+                value={product.name}
                 onClick={this.handleItemPage}
                 class="btn btn-success"
                 type="submit"

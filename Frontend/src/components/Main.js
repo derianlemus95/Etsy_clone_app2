@@ -9,6 +9,8 @@ import Register from "./Register/Register";
 import Profile from "./Profile/Profile";
 import RegisterShop from "./Shop/RegisterShop";
 import Shop from "./Shop/Shop";
+import Product from "./Product/Product";
+import Cart from "./Cart/Cart";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -21,6 +23,8 @@ class Main extends Component {
         <Route path="/profile" component={Profile} />
         <Route path="/shop" component={Shop} />
         <Route path="/registerShop" component={RegisterShop} />
+        <Route path="/product" component={Product} />
+        <Route path="/cart" component={Cart} />
         <Route path="/home" component={Home} />
         <Route path="/delete" component={Delete} />
         <Route path="/create" component={Create} />

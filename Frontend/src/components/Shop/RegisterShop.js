@@ -91,8 +91,9 @@ class RegisterShop extends Component {
         {redirectVar}
         {invalidID}
         {pass}
-        <div class="container">
+        <div class="container" align="center">
           <h2>Name Your Shop</h2>
+          <p>Choose a memorable name that reflcts your style</p>
           <div class="form-group">
             <input
               onChange={this.shopNameChangeHandler}
@@ -103,7 +104,7 @@ class RegisterShop extends Component {
             />
           </div>
           <button onClick={this.submitLogin} class="btn btn-primary">
-            Check
+            Check Availability
           </button>
         </div>
       </div>
