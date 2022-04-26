@@ -13,6 +13,7 @@ var itemsSchema = new Schema(
     salesCount: { type: Number, default: 0 },
     image: { type: String, default: "" },
     shopname: { type: String, default: "" },
+    giftDesc: { type: String, default: "" },
   },
   {
     versionKey: false,

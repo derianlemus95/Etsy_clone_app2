@@ -11,6 +11,8 @@ import RegisterShop from "./Shop/RegisterShop";
 import Shop from "./Shop/Shop";
 import Product from "./Product/Product";
 import Cart from "./Cart/Cart";
+import Purchases from "./Purchases/Purchases";
+import Favorites from "./Favorites/Favorites";
 //Create a Main Component
 class Main extends Component {
   render() {
@@ -26,7 +28,8 @@ class Main extends Component {
         <Route path="/product" component={Product} />
         <Route path="/cart" component={Cart} />
         <Route path="/home" component={Home} />
-        <Route path="/delete" component={Delete} />
+        <Route path="/purchases" component={Purchases} />
+        <Route path="/favorites" component={Favorites} />
         <Route path="/create" component={Create} />
       </div>
     );

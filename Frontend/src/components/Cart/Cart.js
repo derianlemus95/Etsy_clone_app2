@@ -12,18 +12,36 @@ class Cart extends Component {
     this.state = {
       total: [],
       items: [],
+      messages: "",
       newquantity: 1,
       username: localStorage.getItem("email"),
       authFlag: false,
     };
+    this.messageHandler = this.messageHandler.bind(this);
   }
+  //username change handler to update state variable with the text entered by the user
+  messageHandler = (e) => {
+    this.setState({
+      messages: e.target.value,
+    });
+  };
+  submitGift = (e) => {
+    //e.preventDefault();
+    const data = {
+      id: e.target.value,
+      username: localStorage.getItem("email"),
+      messages: this.state.messages,
+    };
+    //make a post request with the user data
+    axios.post("http://localhost:3001/shop/addMessage", data).then((res) => {
+      if (res.data === "SUCCESS") {
+        console.log("added descriptoin");
+      } else {
+        console.log("falied to add descriptoin");
+      }
+    });
+  };
 
-  handleSubmit(e) {
-    //window.location.href='/purchaseHistory'
-  }
-  //submit Login handler to send a request to the node backend
-
-  //get the books data from backend
   componentDidMount() {
     const data = {
       username: localStorage.getItem("email"),
@@ -46,6 +64,7 @@ class Cart extends Component {
       items: this.state.items,
       username: localStorage.getItem("email"),
       total: this.state.total,
+      message: this.state.messages,
     };
     //make a post request with the user data
     axios.post("http://localhost:3001/shop/purchase", data).then((res) => {
@@ -74,11 +93,17 @@ class Cart extends Component {
           <td>{item.quantity} X</td>
           <td>${item.price}</td>
           <td>
-            <Button>MAKE IT A GIFT</Button>
+            <Button
+              value={item.name}
+              onClick={this.submitGift}
+              class="btn btn-primary"
+            >
+              Make Gift
+            </Button>
           </td>
           <td>
             <input
-              onChange={this.nameChangeHandler}
+              onChange={this.messageHandler}
               type="text"
               class="form-control"
               name="message"

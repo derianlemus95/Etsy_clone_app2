@@ -4,7 +4,21 @@ var bodyParser = require("body-parser");
 var session = require("express-session");
 const { mongoDB, frontendURL } = require("./Utils/config");
 var cors = require("cors");
+const multer = require("multer");
 const path = require("path");
+//handle item pic directory
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../");
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, "/uploads/" + file.originalname);
+  },
+});
+const upload = multer({
+  storage: storage,
+});
 //use cors to allow cross origin resource sharing
 app.use(
   cors({ origin: frontendURL, methods: ["GET", "POST"], credentials: true })
@@ -62,10 +76,12 @@ const Register = require("./routes/Register");
 const Book = require("./routes/Book");
 const User = require("./routes/User");
 const Item = require("./routes/Item");
+const Favorite = require("./routes/Favorite");
 app.use("/auth", Login);
 app.use("/auth", Register);
 app.use("/book", Book);
 app.use("/user", User);
 app.use("/shop", Item);
+app.use("/favorite", Favorite);
 //start your server on port 3001
 app.listen(3001, () => console.log("Server Listening on port 3001"));

@@ -59,6 +59,23 @@ router.post(
   }
 );
 
+router.post("/addMessage", (req, res) => {
+  console.log("message api");
+  console.log(req.body);
+
+  Items.findOneAndUpdate(
+    { name: req.body.id },
+    { giftDesc: req.body.messages },
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send("SUCCESS");
+      }
+    }
+  );
+});
+
 //API got get shop items and details
 router.post("/getShopData", checkAuth, (req, res) => {
   console.log(req.body);
@@ -313,5 +330,79 @@ router.post("/purchase", function (req, res) {
   });
   console.log("success");
   res.send("SUCCESS");
+});
+
+//get cart and total price
+router.post("/purchaseHistory", (req, res) => {
+  var myanswer = [];
+  Purchases.find(
+    {
+      user: req.body.username,
+    },
+    {
+      itemId: 1,
+      quantity: 1,
+    },
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        let items = [];
+        let quantity = [];
+        result.map((re) => items.push(re.itemId));
+        result.map((re) => quantity.push(re.quantity));
+        if (items) {
+          //var myanswer = [];
+          var quantityPrice = 0;
+          var total = 0;
+          var mycombinedresult = [];
+          var myitems = [];
+          for (let i = 0; i < items.length; i++) {
+            Items.find(
+              {
+                name: { $in: [items[i]] },
+              },
+              (err, result) => {
+                if (err) {
+                  throw err;
+                } else {
+                  result.map((re, index) => (re.quantity = quantity[index]));
+                  result.map(
+                    (re, index) =>
+                      (quantityPrice =
+                        re.price * quantity[index] + quantityPrice)
+                  );
+                  //console.log(quantityPrice);
+                  // mycombinedresult = [];
+                  //mycombinedresult.push(result);
+                  console.log("this result" + result);
+                  myitems.push(...result);
+                  mycombinedresult = [...myitems];
+                  //mycombinedresult.push(quantityPrice.toString());
+                  total = quantityPrice.toString();
+                  //myanswer.push(result);
+                  //myanswer.push(quantityPrice.toString());
+                  //console.log(mycombinedresult);
+                  // myanswer = mycombinedresult;
+                  //response.json(quantityPrice);
+                  //res.send(JSON.stringify(mycombinedresult));
+                }
+              }
+            );
+          }
+          setTimeout(function () {
+            var allresult = [];
+            allresult.push(mycombinedresult);
+            allresult.push(total);
+            console.log("total " + total);
+            console.log("Purchase History : " + JSON.stringify(allresult));
+            return res.status(200).send(JSON.stringify(allresult));
+          }, 1000);
+        } else {
+          res.end("EMPTY");
+        }
+      }
+    }
+  );
 });
 module.exports = router;

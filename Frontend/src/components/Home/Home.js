@@ -36,7 +36,7 @@ class Home extends Component {
       id: e.target.value,
     };
     axios
-      .post("http://localhost:3001/addToFavorites", data)
+      .post("http://localhost:3001/favorite/addToFavorites", data)
       .then((response) => {
         if (response.status === 200) {
           console.log("SUCCESS");
@@ -128,7 +128,7 @@ class Home extends Component {
           <td>
             <div style={{ width: "100%" }}>
               <Button
-                value={product.id}
+                value={product.name}
                 onClick={this.handleAddToFavorites}
                 class="btn btn-success"
                 type="submit"
