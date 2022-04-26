@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import DataTable from "react-data-table-component";
 class Purchases extends Component {
   constructor() {
     super();
@@ -36,6 +37,38 @@ class Purchases extends Component {
       });
   }
   render() {
+    const columns = [
+      {
+        name: "Order ID",
+        selector: (row) => row._id,
+        sortable: true,
+      },
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Image",
+        selector: (row) => row.image,
+        sortable: false,
+      },
+      {
+        name: "Gift Description",
+        selector: (row) => row.giftDesc,
+        sortable: false,
+      },
+      {
+        name: "Quantity",
+        selector: (row) => row.quantity,
+        sortable: true,
+      },
+      {
+        name: "Price",
+        selector: (row) => row.price,
+        sortable: true,
+      },
+    ];
     //iterate over books to create a table row
     let details = this.state.items.map((item) => {
       return (
@@ -62,23 +95,13 @@ class Purchases extends Component {
       <div>
         {redirectVar}
         <div class="container">
-          <h2>Purchase History</h2>
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Gift Description</th>
-                <th>Item</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/*Display the Tbale row based on data recieved*/}
-              {details}
-            </tbody>
-          </Table>
+          <h1>Past Orders</h1>
+          <DataTable
+            pagination
+            columns={columns}
+            data={this.state.items}
+            paginationRowsPerPageOptions={[2, 5, 10]}
+          />
         </div>
       </div>
     );
