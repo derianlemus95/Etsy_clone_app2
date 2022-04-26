@@ -13,16 +13,23 @@ class Cart extends Component {
       total: [],
       items: [],
       messages: "",
+      quantity: "",
       newquantity: 1,
       username: localStorage.getItem("email"),
       authFlag: false,
     };
     this.messageHandler = this.messageHandler.bind(this);
+    this.quantityHandler = this.quantityHandler.bind(this);
   }
   //username change handler to update state variable with the text entered by the user
   messageHandler = (e) => {
     this.setState({
       messages: e.target.value,
+    });
+  };
+  quantityHandler = (e) => {
+    this.setState({
+      quantity: e.target.value,
     });
   };
   submitGift = (e) => {
@@ -40,6 +47,41 @@ class Cart extends Component {
         console.log("falied to add descriptoin");
       }
     });
+  };
+
+  submitDelete = (e) => {
+    //e.preventDefault();
+    const data = {
+      id: e.target.value,
+      username: localStorage.getItem("email"),
+    };
+    //make a post request with the user data
+    axios.post("http://localhost:3001/shop/deleteItem", data).then((res) => {
+      if (res.data === "SUCCESS") {
+        console.log("added descriptoin");
+      } else {
+        console.log("falied to add descriptoin");
+      }
+    });
+  };
+
+  submitQuantity = (e) => {
+    //e.preventDefault();
+    const data = {
+      id: e.target.value,
+      username: localStorage.getItem("email"),
+      quantity: this.state.quantity,
+    };
+    //make a post request with the user data
+    axios
+      .post("http://localhost:3001/shop/updateQuantity", data)
+      .then((res) => {
+        if (res.data === "SUCCESS") {
+          console.log("updated quantity");
+        } else {
+          console.log("falied to add quantity");
+        }
+      });
   };
 
   componentDidMount() {
@@ -85,12 +127,36 @@ class Cart extends Component {
       return (
         <tr>
           <td>
+            <Button
+              value={item.name}
+              onClick={this.submitDelete}
+              class="btn btn-primary"
+            >
+              Remove
+            </Button>
+          </td>
+          <td>
             {item.image && (
               <img src={"http://localhost:3000/" + item.image} alt="img" />
             )}
           </td>
           <td>{item.name}</td>
-          <td>{item.quantity} X</td>
+          <td>
+            <input
+              onChange={this.quantityHandler}
+              type="number"
+              class="form-control"
+              name="quantity"
+              placeholder={item.quantity}
+            />
+            <Button
+              value={item.name}
+              onClick={this.submitQuantity}
+              class="btn btn-primary"
+            >
+              Update
+            </Button>
+          </td>
           <td>${item.price}</td>
           <td>
             <Button
@@ -132,6 +198,7 @@ class Cart extends Component {
           <Table striped bordered hover variant="dark">
             <thead>
               <tr>
+                <th>Remove Item</th>
                 <th>Item</th>
                 <th>Name</th>
                 <th>Quantity</th>

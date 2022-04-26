@@ -75,6 +75,40 @@ router.post("/addMessage", (req, res) => {
     }
   );
 });
+router.post("/deleteItem", (req, res) => {
+  console.log("message api");
+  console.log(req.body);
+  Carts.deleteMany(
+    {
+      user: req.body.username,
+      itemId: req.body.id,
+    },
+    (error, result) => {
+      if (error) {
+        throw error;
+      } else {
+        res.send("SUCCESS");
+      }
+    }
+  );
+});
+
+router.post("/updateQuantity", (req, res) => {
+  console.log("quantity api");
+  console.log(req.body);
+
+  Carts.findOneAndUpdate(
+    { user: req.body.username, itemId: req.body.id },
+    { quantity: req.body.quantity },
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send("SUCCESS");
+      }
+    }
+  );
+});
 
 //API got get shop items and details
 router.post("/getShopData", checkAuth, (req, res) => {

@@ -41,15 +41,15 @@ class Purchases extends Component {
       return (
         <tr>
           <td>{item._id}</td>
-          <td>{item.giftDesc}</td>
+          <td>{item.name}</td>
           <td>
             {item.image && (
               <img src={"http://localhost:3000/" + item.image} alt="img" />
             )}
           </td>
-          <td>{item.name}</td>
-          <td>{item.quantity} X</td>
-          <td>${item.price}</td>
+          <td>{item.giftDesc}</td>
+          <td>{item.quantity}</td>
+          <td>@ ${item.price} each</td>
         </tr>
       );
     });
@@ -79,9 +79,6 @@ class Purchases extends Component {
               {details}
             </tbody>
           </Table>
-        </div>
-        <div class="container">
-          <h3>Total Price for this Order: ${this.state.total}</h3>
         </div>
       </div>
     );
