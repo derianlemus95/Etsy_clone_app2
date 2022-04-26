@@ -13,7 +13,7 @@ class Cart extends Component {
       total: [],
       items: [],
       messages: "",
-      quantity: "",
+      quantity: 1,
       newquantity: 1,
       username: localStorage.getItem("email"),
       authFlag: false,
